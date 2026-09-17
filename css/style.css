@@ -1182,3 +1182,25 @@ a.fraction-card { display: block; color: inherit; }
   margin-bottom: 0.4rem;
   opacity: 0.7;
 }
+
+.search-hint {
+  padding: 0.6rem 1.2rem;
+  background: rgba(201,162,39,0.08);
+  color: var(--accent);
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+.search-item-doc {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  font-style: italic;
+  margin-bottom: 0.2rem;
+}
+.search-item-chapter {
+  color: var(--accent);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
+  opacity: 0.7;
+}

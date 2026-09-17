@@ -5,6 +5,7 @@
 
   const allArticles = [];
 
+  // УК
   if (typeof UK_ARTICLES !== 'undefined') {
     UK_ARTICLES.forEach(a => allArticles.push({
       ...a,
@@ -16,6 +17,7 @@
     }));
   }
 
+  // КоАП
   if (typeof KOAP_ARTICLES !== 'undefined') {
     KOAP_ARTICLES.forEach(a => allArticles.push({
       ...a,
@@ -27,6 +29,7 @@
     }));
   }
 
+  // Закон об обороне
   if (typeof LAW_OBORONA !== 'undefined') {
     LAW_OBORONA.forEach(a => allArticles.push({
       ...a,
@@ -38,6 +41,7 @@
     }));
   }
 
+  // Фракции
   const allFractions = [];
   if (typeof FRACTIONS !== 'undefined') {
     FRACTIONS.forEach(f => {
@@ -56,40 +60,54 @@
     });
   }
 
-  // === Очистка запроса ===
-  function cleanQuery(q) {
-    return q
-      .toLowerCase()
-      .replace(/стать[яию]\s*/g, '')     // убрать "статья", "статьи", "статью"
-      .replace(/ст\.\s*/g, '')            // "ст."
-      .replace(/\s+/g, ' ')               // убрать лишние пробелы
-      .trim();
+  // === Умный разбор запроса ===
+  function parseQuery(q) {
+    let text = ' ' + q.toLowerCase() + ' ';
+    let source = null;
+
+    // Определяем документ
+    if (/к\s*о\s*а\s*п|коап|административ/i.test(text)) {
+      source = 'КоАП';
+      text = text.replace(/к\s*о\s*а\s*п\w*|коап\w*|административ\w*/gi, ' ');
+    } else if (/закон\s*об\s*оборон|оборон/i.test(text)) {
+      source = 'Закон об обороне';
+      text = text.replace(/закон\s*об\s*оборон\w*|оборон\w*/gi, ' ');
+    } else if (/(^|\s)ук(\s|$)|уголовн/i.test(text)) {
+      source = 'УК';
+      text = text.replace(/(^|\s)ук(\s|$)|уголовн\w*/gi, ' ');
+    }
+
+    // Убираем "статья", "статьи", "статью", "ст.", "ст"
+    text = text.replace(/стать[яию]\s*/gi, ' ');
+    text = text.replace(/(^|\s)ст\.?\s*/gi, ' ');
+
+    // Убираем всё, кроме букв, цифр, точек и дефисов
+    text = text.replace(/[^\wа-яё.\- ]/gi, ' ');
+    text = text.replace(/\s+/g, ' ').trim();
+
+    return { source, text };
   }
 
-  // === Определение желаемого документа ===
-  function detectSource(q) {
-    const lower = q.toLowerCase();
-    if (/к ?о ?а ?п|коап|административ/i.test(lower)) return 'КоАП';
-    if (/ук\b|уголовн/i.test(lower)) return 'УК';
-    if (/оборон|закон об обороне/i.test(lower)) return 'Закон об обороне';
-    return null;
-  }
-
+  // === Скоринг: статья ===
   function scoreLaw(article, q) {
     const artNum = (article.article || '').toLowerCase();
     const title = (article.title || '').toLowerCase();
     const content = (article.content || '').toLowerCase();
     const punish = (article.punishment || '').toLowerCase();
     let s = 0;
-    if (artNum === q) s += 1000;
-    else if (artNum.startsWith(q)) s += 500;
+
+    if (artNum === q) s += 2000;
+    else if (artNum.startsWith(q + '.')) s += 900;
+    else if (artNum.startsWith(q)) s += 800;
     else if (artNum.includes(q)) s += 200;
+
     if (title.includes(q)) s += 300;
     if (content.includes(q)) s += 100;
     if (punish.includes(q)) s += 50;
     return s;
   }
 
+  // === Скоринг: фракция ===
   function scoreFraction(fr, q) {
     const hay = (
       fr.title + ' ' + fr.fullName + ' ' + fr.description + ' ' +
@@ -134,8 +152,7 @@
       return;
     }
 
-    const query = cleanQuery(originalQ);
-    const preferredSource = detectSource(originalQ);
+    const { source: preferredSource, text: query } = parseQuery(originalQ);
 
     if (!query) {
       resultsEl.innerHTML = '<div class="search-no">Введите номер или название статьи</div>';
@@ -147,14 +164,14 @@
       .map(a => ({ item: a, score: scoreLaw(a, query) }))
       .filter(x => x.score > 0);
 
-    // Если указан конкретный документ — фильтруем
+    // Фильтр по документу
     if (preferredSource) {
       lawResults = lawResults.filter(x => x.item.source === preferredSource);
     }
 
     lawResults = lawResults
       .sort((a, b) => b.score - a.score)
-      .slice(0, 15);
+      .slice(0, 20);
 
     const fracResults = allFractions
       .map(f => ({ item: f, score: scoreFraction(f, query) }))
