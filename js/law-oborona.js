@@ -60,6 +60,7 @@
       <h2>${esc(p.title)}</h2>
       <div class="chapter-tag">${esc(p.chapter)}</div>
       <div class="content">${esc(p.content)}</div>
+      <div id="commentsSection"></div>
     `;
 
     if (typeof attachFavoriteButton === 'function') {
@@ -68,6 +69,11 @@
     }
 
     document.getElementById('modal').classList.add('active');
+
+    if (typeof renderComments === 'function') {
+      const key = makeKey('Закон об обороне', p.article);
+      renderComments(key, 'Закон об обороне', p.article);
+    }
   };
 
   function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }

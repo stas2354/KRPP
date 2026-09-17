@@ -73,6 +73,7 @@
       <div class="content">${esc(p.content)}</div>
       ${p.punishment ? `<div class="punish"><b>⚖️ Наказание:</b><br>${esc(p.punishment)}</div>` : ''}
       ${p.bail ? `<div class="punish"><b>💰 Залог:</b> ${p.bail.toLocaleString('ru-RU')} КРРП рублей</div>` : ''}
+      <div id="commentsSection"></div>
     `;
 
     if (typeof attachFavoriteButton === 'function') {
@@ -81,6 +82,11 @@
     }
 
     document.getElementById('modal').classList.add('active');
+
+    if (typeof renderComments === 'function') {
+      const key = makeKey('УК', p.article);
+      renderComments(key, 'УК', p.article);
+    }
   };
 
   function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
