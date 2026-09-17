@@ -310,3 +310,107 @@ button.secondary:hover { border-color: var(--accent); color: var(--accent); }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+/* Глобальный поиск */
+.global-search-box {
+  position: relative;
+  max-width: 600px;
+  margin: 2rem auto 0;
+}
+
+.global-search-box input {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  margin-bottom: 0;
+}
+
+.global-search-box input:focus {
+  border-color: var(--accent);
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  max-height: 500px;
+  overflow-y: auto;
+  z-index: 200;
+  display: none;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.search-results.active {
+  display: block;
+}
+
+.search-item {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.search-item:last-child { border-bottom: none; }
+
+.search-item:hover {
+  background: var(--bg-hover);
+}
+
+.search-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.search-source {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.search-num {
+  color: var(--text-dim);
+}
+
+.search-item-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+}
+
+.search-item-preview {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+
+.search-item-punish {
+  color: #ffb84d;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.search-no {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+mark {
+  background: rgba(201,162,39,0.3);
+  color: var(--accent);
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
+  font-weight: 600;
+}

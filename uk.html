@@ -42,7 +42,30 @@
     </div>
   </div>
 
-  <script src="js/data.js"></script>
+    <script src="js/data.js"></script>
   <script src="js/uk.js"></script>
+  <script>
+    // Автооткрытие статьи, если пришёл из поиска
+    window.addEventListener('load', () => {
+      const artNum = sessionStorage.getItem('openArticle');
+      const source = sessionStorage.getItem('openSource');
+      if (!artNum) return;
+
+      // Проверяем, что статья из нужного документа
+      const expectedSource = document.title.includes('КоАП') ? 'КоАП' : 'УК';
+      if (source !== expectedSource) return;
+
+      sessionStorage.removeItem('openArticle');
+      sessionStorage.removeItem('openSource');
+
+      // Ищем статью
+      const data = typeof UK_ARTICLES !== 'undefined' ? UK_ARTICLES :
+                   typeof KOAP_ARTICLES !== 'undefined' ? KOAP_ARTICLES : [];
+      const idx = data.findIndex(a => a.article === artNum);
+      if (idx >= 0 && typeof openArticle === 'function') {
+        setTimeout(() => openArticle(idx), 100);
+      }
+    });
+  </script>
 </body>
 </html>
