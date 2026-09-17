@@ -1072,3 +1072,69 @@ a.fraction-card { display: block; color: inherit; }
   color: inherit;
   display: block;
 }
+/* Карточка-ссылка на закон */
+.law-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  margin-top: 2rem;
+}
+.law-card {
+  background: linear-gradient(135deg, #1a1f2b 0%, #12161f 100%);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: 14px;
+  padding: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.law-card-link:hover .law-card {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  border-top-color: var(--accent-hover);
+}
+.law-card-icon {
+  font-size: 3.5rem;
+  background: rgba(201,162,39,0.1);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.law-card-body { flex: 1; }
+.law-card-title {
+  color: var(--accent);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+.law-card-desc {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 0.8rem;
+}
+.law-card-btn {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.2s;
+}
+.law-card-link:hover .law-card-btn { transform: translateX(4px); }
+
+@media (max-width: 768px) {
+  .law-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .law-card-icon { width: 64px; height: 64px; font-size: 2.6rem; }
+  .law-card-title { font-size: 1.1rem; }
+  .law-card-desc { font-size: 0.85rem; }
+}
