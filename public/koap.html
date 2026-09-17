@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>УК Республики Йойград</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-code="uk">
+  <nav>
+    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
+    <ul>
+      <li><a href="/">Главная</a></li>
+      <li><a href="/uk.html" class="active">УК</a></li>
+      <li><a href="/koap.html">КоАП</a></li>
+      <li><a href="/ai.html">ИИ-помощник</a></li>
+      <li><a href="/admin.html" id="adminLink" class="hidden">Админка</a></li>
+      <li><a href="/login.html" id="loginLink">Войти</a></li>
+      <li><a href="#" id="logoutLink" class="hidden">Выйти</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1>📕 Уголовный кодекс</h1>
+    <p class="subtitle">Республика Йойград</p>
+
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="🔍 Поиск по статьям...">
+      <select id="jurisdiction">
+        <option value="all">Все юрисдикции</option>
+        <option value="Федеральная">Федеральные</option>
+        <option value="Региональная">Региональные</option>
+        <option value="Военная">Военные</option>
+        <option value="Общая">Общие</option>
+      </select>
+    </div>
+
+    <div class="tabs" id="chapterTabs"></div>
+    <div id="articles"></div>
+  </div>
+
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <div id="modalContent"></div>
+      <button class="secondary" style="margin-top: 1.5rem;" onclick="document.getElementById('modal').classList.remove('active')">Закрыть</button>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/uk.js"></script>
+</body>
+</html>
