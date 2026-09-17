@@ -5,28 +5,39 @@
 
   const allArticles = [];
 
-  // УК
   if (typeof UK_ARTICLES !== 'undefined') {
     UK_ARTICLES.forEach(a => allArticles.push({
-      ...a, source: 'УК', sourceEmoji: '📕', page: 'uk.html', type: 'law'
+      ...a,
+      source: 'УК',
+      sourceFull: 'Уголовный кодекс',
+      sourceEmoji: '📕',
+      sourceColor: '#ff5b5b',
+      page: 'uk.html'
     }));
   }
 
-  // КоАП
   if (typeof KOAP_ARTICLES !== 'undefined') {
     KOAP_ARTICLES.forEach(a => allArticles.push({
-      ...a, source: 'КоАП', sourceEmoji: '📘', page: 'koap.html', type: 'law'
+      ...a,
+      source: 'КоАП',
+      sourceFull: 'Кодекс об административных правонарушениях',
+      sourceEmoji: '📘',
+      sourceColor: '#5dade2',
+      page: 'koap.html'
     }));
   }
 
-  // Закон об обороне
   if (typeof LAW_OBORONA !== 'undefined') {
     LAW_OBORONA.forEach(a => allArticles.push({
-      ...a, source: 'Закон об обороне', sourceEmoji: '📜', page: 'law-oborona.html', type: 'law'
+      ...a,
+      source: 'Закон об обороне',
+      sourceFull: 'Республиканский закон об обороне',
+      sourceEmoji: '📜',
+      sourceColor: '#c9a227',
+      page: 'law-oborona.html'
     }));
   }
 
-  // Фракции
   const allFractions = [];
   if (typeof FRACTIONS !== 'undefined') {
     FRACTIONS.forEach(f => {
@@ -40,13 +51,30 @@
         ranks: f.ranks,
         emoji: f.emoji,
         color: f.color,
-        page: (f.id === 'army') ? 'army.html' : ('fraction.html?id=' + f.id),
-        type: 'fraction'
+        page: (f.id === 'army') ? 'army.html' : ('fraction.html?id=' + f.id)
       });
     });
   }
 
-  // ===== Поиск по УК/КоАП/Закону =====
+  // === Очистка запроса ===
+  function cleanQuery(q) {
+    return q
+      .toLowerCase()
+      .replace(/стать[яию]\s*/g, '')     // убрать "статья", "статьи", "статью"
+      .replace(/ст\.\s*/g, '')            // "ст."
+      .replace(/\s+/g, ' ')               // убрать лишние пробелы
+      .trim();
+  }
+
+  // === Определение желаемого документа ===
+  function detectSource(q) {
+    const lower = q.toLowerCase();
+    if (/к ?о ?а ?п|коап|административ/i.test(lower)) return 'КоАП';
+    if (/ук\b|уголовн/i.test(lower)) return 'УК';
+    if (/оборон|закон об обороне/i.test(lower)) return 'Закон об обороне';
+    return null;
+  }
+
   function scoreLaw(article, q) {
     const artNum = (article.article || '').toLowerCase();
     const title = (article.title || '').toLowerCase();
@@ -62,7 +90,6 @@
     return s;
   }
 
-  // ===== Поиск по фракциям =====
   function scoreFraction(fr, q) {
     const hay = (
       fr.title + ' ' + fr.fullName + ' ' + fr.description + ' ' +
@@ -79,7 +106,6 @@
     return s;
   }
 
-  // ===== Подсветка =====
   function esc(s) {
     const d = document.createElement('div');
     d.textContent = s ?? '';
@@ -95,27 +121,40 @@
     } catch { return escaped; }
   }
 
-  // ===== Переход =====
   window.goToArticle = function(page, source, articleNum) {
     sessionStorage.setItem('openArticle', articleNum);
     sessionStorage.setItem('openSource', source);
     window.location.href = page;
   };
 
-  // ===== Отрисовка =====
-  function render(q) {
-    if (!q.trim()) {
+  function render(originalQ) {
+    if (!originalQ.trim()) {
       resultsEl.innerHTML = '';
       resultsEl.classList.remove('active');
       return;
     }
-    const query = q.toLowerCase().trim();
 
-    const lawResults = allArticles
+    const query = cleanQuery(originalQ);
+    const preferredSource = detectSource(originalQ);
+
+    if (!query) {
+      resultsEl.innerHTML = '<div class="search-no">Введите номер или название статьи</div>';
+      resultsEl.classList.add('active');
+      return;
+    }
+
+    let lawResults = allArticles
       .map(a => ({ item: a, score: scoreLaw(a, query) }))
-      .filter(x => x.score > 0)
+      .filter(x => x.score > 0);
+
+    // Если указан конкретный документ — фильтруем
+    if (preferredSource) {
+      lawResults = lawResults.filter(x => x.item.source === preferredSource);
+    }
+
+    lawResults = lawResults
       .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
+      .slice(0, 15);
 
     const fracResults = allFractions
       .map(f => ({ item: f, score: scoreFraction(f, query) }))
@@ -132,18 +171,22 @@
     }
 
     let html = '';
+    if (preferredSource) {
+      html += `<div class="search-hint">Поиск в: <b>${preferredSource}</b></div>`;
+    }
 
     if (lawResults.length) {
       html += '<div class="search-group-title">📖 Статьи законов</div>';
       html += lawResults.map(({ item }) => `
-        <div class="search-item" onclick="goToArticle('${item.page}', '${item.source}', '${item.article}')">
+        <div class="search-item" onclick="goToArticle('${item.page}', '${item.source}', '${item.article}')" style="border-left: 3px solid ${item.sourceColor};">
           <div class="search-item-head">
-            <span class="search-source">${item.sourceEmoji} ${item.source}</span>
-            <span class="search-num">Статья ${highlight(item.article, q)}</span>
+            <span class="search-source" style="color:${item.sourceColor}">${item.sourceEmoji} <b>${item.source}</b></span>
+            <span class="search-num">Статья ${highlight(item.article, query)}</span>
           </div>
-          <div class="search-item-title">${highlight(item.title, q)}</div>
-          <div class="search-item-preview">${highlight((item.content || '').slice(0, 120), q)}...</div>
-          ${item.punishment ? `<div class="search-item-punish">⚖️ ${highlight(item.punishment.slice(0, 80), q)}</div>` : ''}
+          <div class="search-item-doc">${item.sourceFull}</div>
+          <div class="search-item-chapter">${item.chapter ? esc(item.chapter) : ''}</div>
+          <div class="search-item-title">${highlight(item.title, query)}</div>
+          <div class="search-item-preview">${highlight((item.content || '').slice(0, 100), query)}...</div>
         </div>
       `).join('');
     }
@@ -151,13 +194,13 @@
     if (fracResults.length) {
       html += '<div class="search-group-title">🏛️ Фракции</div>';
       html += fracResults.map(({ item }) => `
-        <a href="${item.page}" class="search-item search-item-link">
+        <a href="${item.page}" class="search-item search-item-link" style="border-left: 3px solid ${item.color};">
           <div class="search-item-head">
-            <span class="search-source" style="color:${item.color}">${item.emoji} ${highlight(item.title, q)}</span>
+            <span class="search-source" style="color:${item.color}">${item.emoji} <b>${highlight(item.title, query)}</b></span>
             <span class="search-num">Фракция</span>
           </div>
-          <div class="search-item-title">${highlight(item.fullName, q)}</div>
-          <div class="search-item-preview">${highlight(item.description.slice(0, 120), q)}...</div>
+          <div class="search-item-title">${highlight(item.fullName, query)}</div>
+          <div class="search-item-preview">${highlight(item.description.slice(0, 100), query)}...</div>
         </a>
       `).join('');
     }
