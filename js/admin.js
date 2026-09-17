@@ -398,7 +398,7 @@
   }
 
   // ============ ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ============
-  async function switchTab(tab) {
+    async function switchTab(tab) {
     currentTab = tab;
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
     content.innerHTML = '<p class="muted">Загрузка...</p>';
@@ -407,11 +407,109 @@
     if (tab === 'articles') await renderArticles();
     if (tab === 'edits') await renderEdits();
     if (tab === 'users') await renderUsers();
+    if (tab === 'complaints') await renderComplaints();
   }
-
   tabs.forEach(t => {
     t.addEventListener('click', () => switchTab(t.dataset.tab));
   });
+    // ============ ЖАЛОБЫ ============
+  async function renderComplaints() {
+    const sb = await initSupabase();
+    if (!sb) return;
+
+    const { data: complaints } = await sb
+      .from('complaints')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    const counts = {
+      pending: complaints?.filter(c => c.status === 'pending').length || 0,
+      in_review: complaints?.filter(c => c.status === 'in_review').length || 0,
+      approved: complaints?.filter(c => c.status === 'approved').length || 0,
+      rejected: complaints?.filter(c => c.status === 'rejected').length || 0,
+    };
+
+    content.innerHTML = `
+      <div class="admin-stats" style="margin-bottom: 1.5rem;">
+        <div class="stat-card"><div class="stat-num">${counts.pending}</div><div class="stat-label">⏳ Ожидают</div></div>
+        <div class="stat-card"><div class="stat-num">${counts.in_review}</div><div class="stat-label">🔍 В работе</div></div>
+        <div class="stat-card"><div class="stat-num">${counts.approved}</div><div class="stat-label">✅ Одобрено</div></div>
+        <div class="stat-card"><div class="stat-num">${counts.rejected}</div><div class="stat-label">❌ Отклонено</div></div>
+      </div>
+
+      <h3>⚖️ Все жалобы (${complaints?.length || 0})</h3>
+
+      <div class="complaints-admin-list">
+        ${!complaints?.length ? '<p class="muted">Жалоб пока нет</p>' : complaints.map(c => `
+          <div class="complaint-admin-item status-${c.status}">
+            <div class="complaint-admin-head">
+              <span class="complaint-status-badge status-${c.status}">${
+                c.status === 'pending' ? '⏳ Ожидает' :
+                c.status === 'in_review' ? '🔍 В работе' :
+                c.status === 'approved' ? '✅ Одобрено' :
+                c.status === 'rejected' ? '❌ Отклонено' : '🔒 Закрыта'
+              }</span>
+              <span class="complaint-date">${new Date(c.created_at).toLocaleString('ru-RU')}</span>
+              <span class="complaint-id">#${c.id}</span>
+            </div>
+
+            <div class="complaint-admin-body">
+              <div class="complaint-section">
+                <div class="complaint-label">👤 Автор:</div>
+                <div class="complaint-value">
+                  <b>Roblox:</b> ${esc(c.author_roblox)}<br>
+                  <b>Discord:</b> ${esc(c.author_discord)}
+                </div>
+              </div>
+
+              <div class="complaint-section">
+                <div class="complaint-label">🎯 Нарушитель:</div>
+                <div class="complaint-value">
+                  <b>Roblox:</b> ${esc(c.violator_roblox)}<br>
+                  ${c.violator_discord ? `<b>Discord:</b> ${esc(c.violator_discord)}` : ''}
+                </div>
+              </div>
+
+              <div class="complaint-section">
+                <div class="complaint-label">📋 Нарушения:</div>
+                <div class="complaint-value">${esc(c.violations)}</div>
+              </div>
+
+              <div class="complaint-section">
+                <div class="complaint-label">🔗 Доказательства:</div>
+                <div class="complaint-value">${esc(c.evidence)}</div>
+              </div>
+            </div>
+
+            <div class="complaint-admin-actions">
+              ${c.status === 'pending' || c.status === 'in_review' ? `
+                <button class="secondary set-status" data-id="${c.id}" data-status="in_review">🔍 В работу</button>
+                <button class="approve-btn set-status" data-id="${c.id}" data-status="approved">✅ Одобрить</button>
+                <button class="danger set-status" data-id="${c.id}" data-status="rejected">❌ Отклонить</button>
+                <button class="secondary set-status" data-id="${c.id}" data-status="closed">🔒 Закрыть</button>
+              ` : `
+                <button class="secondary set-status" data-id="${c.id}" data-status="pending">↩️ Вернуть в ожидание</button>
+              `}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    document.querySelectorAll('.set-status').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const status = btn.dataset.status;
+        const { error } = await sb.from('complaints').update({
+          status,
+          reviewer_id: currentUser.id,
+          updated_at: new Date().toISOString(),
+        }).eq('id', id);
+        if (error) { alert(error.message); return; }
+        renderComplaints();
+      });
+    });
+  }
 
   // Старт
   await switchTab('dashboard');

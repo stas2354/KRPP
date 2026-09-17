@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Подать жалобу | Республика Йойград</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="uk.html">УК</a></li>
+      <li><a href="koap.html">КоАП</a></li>
+      <li><a href="fractions.html">Фракции</a></li>
+      <li><a href="complaints.html" class="active">⚖️ Жалобы</a></li>
+      <li><a href="favorites.html">⭐ Закладки</a></li>
+      <li><a href="login.html" id="profileLink">🔑 Войти</a></li>
+    </ul>
+    <button id="themeToggle" class="theme-toggle" title="Сменить тему">☀️</button>
+  </nav>
+
+  <div class="container">
+    <h1>⚖️ Подача жалобы</h1>
+    <p class="subtitle">Форма жалобы на игрока. Все поля обязательны, кроме Discord нарушителя.</p>
+
+    <div class="complaint-rules">
+      <h3>📋 Правила подачи</h3>
+      <ul>
+        <li><b>Оффтоп</b> в канале жалоб — тайм-аут на 1–7 дней.</li>
+        <li><b>Попытка обмана</b> администрации — ОЧС проекта.</li>
+        <li><b>Не корректное заполнение</b> анкеты — отказ в рассмотрении.</li>
+        <li><b>3.1</b> Жалоба не рассматривается при отсутствии никнейма нарушителя («на скрине» — не считается).</li>
+        <li><b>3.2</b> Жалоба не рассматривается без доказательств. «В ЛС» — не принимается.</li>
+        <li>Рассмотрение жалоб происходит в ветках Discord.</li>
+        <li>Большие файлы — загружайте на <a href="https://imgur.com/" target="_blank">imgur.com</a> (регистрация не нужна).</li>
+      </ul>
+    </div>
+
+    <form id="complaintForm" class="complaint-form">
+      <div id="formError" class="error hidden"></div>
+      <div id="formSuccess" class="success hidden"></div>
+
+      <fieldset>
+        <legend>👤 Ваши данные</legend>
+
+        <label>Ваш никнейм в Roblox *</label>
+        <input type="text" id="authorRoblox" placeholder="Например: stas_roblox" required>
+
+        <label>Ваш никнейм в Discord *</label>
+        <input type="text" id="authorDiscord" placeholder="Например: stas#1234 или @stas" required>
+      </fieldset>
+
+      <fieldset>
+        <legend>🎯 Нарушитель</legend>
+
+        <label>Никнейм нарушителя в Roblox *</label>
+        <input type="text" id="violatorRoblox" placeholder="Например: bad_player_123" required>
+
+        <label>Никнейм нарушителя в Discord</label>
+        <input type="text" id="violatorDiscord" placeholder="Если известен">
+      </fieldset>
+
+      <fieldset>
+        <legend>📋 Суть жалобы</legend>
+
+        <label>Нарушения (какие статьи УК / КоАП нарушены) *</label>
+        <textarea id="violations" rows="5" placeholder="Опишите подробно: что произошло, когда, какие статьи нарушены..." required></textarea>
+
+        <label>Доказательства (ссылки на скриншоты/видео) *</label>
+        <textarea id="evidence" rows="5" placeholder="Ссылки на imgur.com, YouTube, Google Drive..." required></textarea>
+      </fieldset>
+
+      <div class="complaint-actions">
+        <button type="submit" id="submitBtn">📤 Отправить жалобу</button>
+        <button type="button" class="secondary" onclick="window.location.href='index.html'">Отмена</button>
+      </div>
+
+      <p class="muted" style="font-size: 0.85rem; margin-top: 1rem;">
+        ⚠️ Отправляя жалобу, вы соглашаетесь с правилами. Ложные жалобы караются.
+      </p>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/complaints.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/nav-auth.js"></script>
+  <script src="js/mobile.js"></script>
+</body>
+</html>
