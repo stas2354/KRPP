@@ -25,31 +25,26 @@
       ctx += '\n\n';
     }
 
+    if (typeof LAW_OBORONA !== 'undefined') {
+      ctx += '--- РЕСПУБЛИКАНСКИЙ ЗАКОН ОБ ОБОРОНЕ ---\n';
+      ctx += LAW_OBORONA.map(a =>
+        `Статья ${a.article}. ${a.title}\n${a.content}`
+      ).join('\n\n');
+      ctx += '\n\n';
+    }
+
     if (typeof FRACTIONS !== 'undefined') {
       ctx += '--- ФРАКЦИИ И ВЕТВИ ВЛАСТИ ---\n';
       ctx += FRACTIONS.map(f =>
         `${f.name} (${f.fullName})\nРуководитель: ${f.leadership}\nОписание: ${f.description}\nОбязанности: ${f.duties.join('; ')}\nПрава: ${f.rights.join('; ')}\nЗвания: ${f.ranks.join(' → ')}\nФорма: ${f.uniform}`
       ).join('\n\n');
       ctx += '\n\n';
-
-      // Законы фракций
-      const lawsWithContent = FRACTIONS.filter(f => f.law);
-      if (lawsWithContent.length) {
-        ctx += '--- РЕСПУБЛИКАНСКИЕ ЗАКОНЫ ---\n';
-        lawsWithContent.forEach(f => {
-          ctx += `\n[${f.law.title}] (относится к фракции: ${f.name})\n`;
-          ctx += f.law.articles.map(a =>
-            `${a.num}. ${a.title}\n${a.content}`
-          ).join('\n\n');
-          ctx += '\n\n';
-        });
-      }
     }
 
     return ctx;
   }
 
-  const SYSTEM_PROMPT = `Ты — юридический помощник Республики Йойград. Отвечай СТРОГО по законам и информации ниже. Всегда ссылайся на конкретные статьи (например: «Статья 6.5 УК», «Статья 10.2 КоАП», «Статья 17 Республиканского закона об обороне»).
+  const SYSTEM_PROMPT = `Ты — юридический помощник Республики Йойград. Отвечай СТРОГО по законам и информации ниже. Всегда ссылайся на конкретные статьи (например: «Статья 6.5 УК», «Статья 10.2 КоАП», «Статья 17.3 Закона об обороне»).
 
 Правила:
 - Отвечай кратко и по существу.

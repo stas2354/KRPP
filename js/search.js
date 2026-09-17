@@ -19,6 +19,13 @@
     }));
   }
 
+  // Закон об обороне
+  if (typeof LAW_OBORONA !== 'undefined') {
+    LAW_OBORONA.forEach(a => allArticles.push({
+      ...a, source: 'Закон об обороне', sourceEmoji: '📜', page: 'law-oborona.html', type: 'law'
+    }));
+  }
+
   // Фракции
   const allFractions = [];
   if (typeof FRACTIONS !== 'undefined') {
@@ -39,28 +46,7 @@
     });
   }
 
-  // Законы фракций (встроенные)
-  const allLaws = [];
-  if (typeof FRACTIONS !== 'undefined') {
-    FRACTIONS.forEach(f => {
-      if (f.law) {
-        f.law.articles.forEach(a => {
-          allLaws.push({
-            fractionName: f.name,
-            fractionEmoji: f.emoji,
-            fractionColor: f.color,
-            num: a.num,
-            title: a.title,
-            content: a.content,
-            page: (f.id === 'army') ? 'army.html' : ('fraction.html?id=' + f.id),
-            type: 'fraction-law'
-          });
-        });
-      }
-    });
-  }
-
-  // ===== Поиск по УК/КоАП =====
+  // ===== Поиск по УК/КоАП/Закону =====
   function scoreLaw(article, q) {
     const artNum = (article.article || '').toLowerCase();
     const title = (article.title || '').toLowerCase();
@@ -90,18 +76,6 @@
     if (fr.duties.join(' ').toLowerCase().includes(q)) s += 80;
     if (fr.rights.join(' ').toLowerCase().includes(q)) s += 80;
     if (fr.ranks.join(' ').toLowerCase().includes(q)) s += 60;
-    return s;
-  }
-
-  // ===== Поиск по статьям законов фракций =====
-  function scoreFractionLaw(law, q) {
-    const num = (law.num || '').toLowerCase();
-    const title = (law.title || '').toLowerCase();
-    const content = (law.content || '').toLowerCase();
-    let s = 0;
-    if (num.toLowerCase().includes(q)) s += 400;
-    if (title.includes(q)) s += 250;
-    if (content.includes(q)) s += 80;
     return s;
   }
 
@@ -141,7 +115,7 @@
       .map(a => ({ item: a, score: scoreLaw(a, query) }))
       .filter(x => x.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 8);
+      .slice(0, 10);
 
     const fracResults = allFractions
       .map(f => ({ item: f, score: scoreFraction(f, query) }))
@@ -149,13 +123,7 @@
       .sort((a, b) => b.score - a.score)
       .slice(0, 5);
 
-    const lawOfFracResults = allLaws
-      .map(l => ({ item: l, score: scoreFractionLaw(l, query) }))
-      .filter(x => x.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-
-    const total = lawResults.length + fracResults.length + lawOfFracResults.length;
+    const total = lawResults.length + fracResults.length;
 
     if (total === 0) {
       resultsEl.innerHTML = '<div class="search-no">Ничего не найдено 🤷</div>';
@@ -165,9 +133,8 @@
 
     let html = '';
 
-    // --- Статьи законов ---
     if (lawResults.length) {
-      html += '<div class="search-group-title">📖 Статьи кодексов</div>';
+      html += '<div class="search-group-title">📖 Статьи законов</div>';
       html += lawResults.map(({ item }) => `
         <div class="search-item" onclick="goToArticle('${item.page}', '${item.source}', '${item.article}')">
           <div class="search-item-head">
@@ -181,7 +148,6 @@
       `).join('');
     }
 
-    // --- Фракции ---
     if (fracResults.length) {
       html += '<div class="search-group-title">🏛️ Фракции</div>';
       html += fracResults.map(({ item }) => `
@@ -192,21 +158,6 @@
           </div>
           <div class="search-item-title">${highlight(item.fullName, q)}</div>
           <div class="search-item-preview">${highlight(item.description.slice(0, 120), q)}...</div>
-        </a>
-      `).join('');
-    }
-
-    // --- Законы фракций ---
-    if (lawOfFracResults.length) {
-      html += '<div class="search-group-title">📜 Законы фракций</div>';
-      html += lawOfFracResults.map(({ item }) => `
-        <a href="${item.page}" class="search-item search-item-link">
-          <div class="search-item-head">
-            <span class="search-source" style="color:${item.fractionColor}">${item.fractionEmoji} ${item.fractionName}</span>
-            <span class="search-num">${highlight(item.num, q)}</span>
-          </div>
-          <div class="search-item-title">${highlight(item.title, q)}</div>
-          <div class="search-item-preview">${highlight(item.content.slice(0, 120), q)}...</div>
         </a>
       `).join('');
     }
