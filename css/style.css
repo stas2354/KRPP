@@ -1138,3 +1138,26 @@ a.fraction-card { display: block; color: inherit; }
   .law-card-title { font-size: 1.1rem; }
   .law-card-desc { font-size: 0.85rem; }
 }
+
+/* Документ-источник под заголовком */
+.search-item-doc {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  font-style: italic;
+  margin-bottom: 0.2rem;
+}
+.search-item-chapter {
+  color: var(--accent);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
+  opacity: 0.7;
+}
+.search-item {
+  border-left: 3px solid var(--border);
+  transition: background 0.15s;
+}
+.search-item:hover {
+  background: var(--bg-hover);
+}
