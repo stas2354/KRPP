@@ -1,42 +1,17 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Фракции Республики Йойград</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <nav>
-    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
-    <button class="burger" id="burger" aria-label="Меню">
-      <span></span><span></span><span></span>
-    </button>
-    <ul id="navMenu">
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="uk.html">УК</a></li>
-      <li><a href="koap.html">КоАП</a></li>
-      <li><a href="fractions.html" class="active">Фракции</a></li>
-    </ul>
-  </nav>
+(function() {
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('navMenu');
+  if (!burger || !menu) return;
 
-  <div class="container">
-    <h1>🏛️ Фракции и Власть</h1>
-    <p class="subtitle">Государственные структуры Республики Йойград</p>
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('active');
+    menu.classList.toggle('open');
+  });
 
-    <div class="search-bar">
-      <input type="text" id="search" placeholder="🔍 Поиск по фракциям...">
-    </div>
-
-    <h2 class="section-title">🛡️ Силовые структуры</h2>
-    <div class="fractions-grid" id="powerGrid"></div>
-
-    <h2 class="section-title">⚡ Ветви власти</h2>
-    <div class="fractions-grid" id="govGrid"></div>
-  </div>
-
-  <script src="js/data-fractions.js"></script>
-  <script src="js/fractions.js"></script>
-  <script src="js/mobile.js"></script>
-</body>
-</html>
+  menu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      burger.classList.remove('active');
+      menu.classList.remove('open');
+    });
+  });
+})();
