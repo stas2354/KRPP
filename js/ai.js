@@ -6,7 +6,6 @@
 
   let busy = false;
 
-  // Собираем всю базу для контекста
   function buildContext() {
     let ctx = '=== ЗАКОНОДАТЕЛЬСТВО РЕСПУБЛИКИ ЙОЙГРАД ===\n\n';
 
@@ -29,15 +28,28 @@
     if (typeof FRACTIONS !== 'undefined') {
       ctx += '--- ФРАКЦИИ И ВЕТВИ ВЛАСТИ ---\n';
       ctx += FRACTIONS.map(f =>
-        `${f.name} (${f.fullName})\nРуководитель: ${f.leadership}\nОписание: ${f.description}\nОбязанности: ${f.duties.join('; ')}\nПрава: ${f.rights.join('; ')}\nЗвания: ${f.ranks.join(' → ')}`
+        `${f.name} (${f.fullName})\nРуководитель: ${f.leadership}\nОписание: ${f.description}\nОбязанности: ${f.duties.join('; ')}\nПрава: ${f.rights.join('; ')}\nЗвания: ${f.ranks.join(' → ')}\nФорма: ${f.uniform}`
       ).join('\n\n');
       ctx += '\n\n';
+
+      // Законы фракций
+      const lawsWithContent = FRACTIONS.filter(f => f.law);
+      if (lawsWithContent.length) {
+        ctx += '--- РЕСПУБЛИКАНСКИЕ ЗАКОНЫ ---\n';
+        lawsWithContent.forEach(f => {
+          ctx += `\n[${f.law.title}] (относится к фракции: ${f.name})\n`;
+          ctx += f.law.articles.map(a =>
+            `${a.num}. ${a.title}\n${a.content}`
+          ).join('\n\n');
+          ctx += '\n\n';
+        });
+      }
     }
 
     return ctx;
   }
 
-  const SYSTEM_PROMPT = `Ты — юридический помощник Республики Йойград. Отвечай СТРОГО по законам и информации ниже. Всегда ссылайся на конкретные статьи (например: «Статья 6.5 УК» или «Статья 10.2 КоАП») или на название фракции.
+  const SYSTEM_PROMPT = `Ты — юридический помощник Республики Йойград. Отвечай СТРОГО по законам и информации ниже. Всегда ссылайся на конкретные статьи (например: «Статья 6.5 УК», «Статья 10.2 КоАП», «Статья 17 Республиканского закона об обороне»).
 
 Правила:
 - Отвечай кратко и по существу.
@@ -45,10 +57,9 @@
 - Не выдумывай статьи и наказания.
 - Тон — официальный, как у юриста.
 - Пиши на русском.
-- Форматируй ответ: сначала ответ, потом ссылки на статьи.
+- Форматируй: сначала ответ, потом ссылки на статьи.
 
 БАЗА ЗНАНИЙ:
-
 `;
 
   function addMsg(text, role) {
@@ -71,8 +82,6 @@
 
     try {
       const context = buildContext();
-      const fullPrompt = SYSTEM_PROMPT + context + '\n\nВОПРОС ГРАЖДАНИНА: ' + question;
-
       const response = await fetch('https://text.pollinations.ai/openai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -85,9 +94,7 @@
         })
       });
 
-      if (!response.ok) {
-        throw new Error('Сервис вернул ошибку ' + response.status);
-      }
+      if (!response.ok) throw new Error('Сервис вернул ошибку ' + response.status);
 
       const data = await response.json();
       const answer = data?.choices?.[0]?.message?.content
@@ -97,7 +104,7 @@
       thinking.textContent = answer;
     } catch (e) {
       console.error(e);
-      thinking.textContent = '❌ Ошибка: ' + (e?.message || 'не удалось получить ответ. Попробуйте позже.');
+      thinking.textContent = '❌ Ошибка: ' + (e?.message || 'попробуйте позже');
     } finally {
       busy = false;
       sendBtn.disabled = false;
@@ -113,10 +120,7 @@
   });
 
   input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      sendBtn.click();
-    }
+    if (e.key === 'Enter') { e.preventDefault(); sendBtn.click(); }
   });
 
   document.querySelectorAll('.ai-hint').forEach(h => {

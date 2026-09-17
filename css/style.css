@@ -1055,3 +1055,20 @@ a.fraction-card { display: block; color: inherit; }
   .law-art-title { font-size: 0.88rem; }
   .law-art-content { padding: 1rem; font-size: 0.85rem; }
 }
+
+/* Группы в поиске */
+.search-group-title {
+  padding: 0.7rem 1.2rem 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  background: rgba(201,162,39,0.05);
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+.search-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
