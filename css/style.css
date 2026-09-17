@@ -716,3 +716,63 @@ select {
   .article-title { font-size: 0.95rem; }
   .modal { padding: 1.2rem; }
 }
+/* Заголовок секции */
+.section-title {
+  font-size: 1.3rem;
+  color: var(--accent);
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Карточка фракции — как ссылка */
+a.fraction-card { display: block; color: inherit; }
+
+/* Кнопка "назад" */
+.back-link {
+  display: inline-block;
+  color: var(--text-dim);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+/* Большой герой фракции на отдельной странице */
+.fraction-hero {
+  background: linear-gradient(135deg, var(--fc2) 0%, var(--bg-card) 100%);
+  border-radius: 14px;
+  padding: 3rem 2rem;
+  text-align: center;
+  border-left: 6px solid var(--fc1);
+  margin-bottom: 2rem;
+}
+.fraction-emoji-huge { font-size: 5rem; margin-bottom: 0.5rem; }
+.fraction-hero h1 { color: var(--fc1); font-size: 2.2rem; margin-bottom: 0.3rem; }
+.fraction-full-hero { color: var(--text-dim); font-size: 1rem; margin-bottom: 0.8rem; }
+.fraction-lead-hero { color: var(--text); font-size: 0.95rem; }
+
+/* Блок информации на странице фракции */
+.fraction-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 1.2rem;
+}
+.fraction-block h2 {
+  color: var(--accent);
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+}
+.fraction-block p { line-height: 1.7; color: var(--text); }
+
+/* Адаптив для страницы фракции */
+@media (max-width: 768px) {
+  .fraction-hero { padding: 2rem 1.2rem; }
+  .fraction-emoji-huge { font-size: 3.5rem; }
+  .fraction-hero h1 { font-size: 1.6rem; }
+  .fraction-block { padding: 1.2rem; }
+  .section-title { font-size: 1.1rem; }
+}
