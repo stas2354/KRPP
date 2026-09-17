@@ -1,31 +1,48 @@
-// Добавляет кнопку ⭐ в модалку статьи
-window.attachFavoriteButton = function(source, article, title, page) {
+// Кнопка ⭐ в модалке + история
+window.attachFavoriteButton = async function(source, article, title, page) {
   const modalContent = document.getElementById('modalContent');
   if (!modalContent) return;
 
+  const user = await getUser();
   const key = makeKey(source, article);
-  const isFav = Store.isFavorite(key);
 
-  // Удаляем старую кнопку если была
   modalContent.querySelector('.fav-btn')?.remove();
 
   const btn = document.createElement('button');
-  btn.className = 'fav-btn' + (isFav ? ' active' : '');
-  btn.innerHTML = isFav ? '⭐ В избранном' : '☆ В избранное';
-  btn.title = isFav ? 'Убрать из избранного' : 'Добавить в избранное';
+  btn.className = 'fav-btn';
 
-  btn.addEventListener('click', (e) => {
+  if (!user) {
+    btn.innerHTML = '🔒 Войдите чтобы сохранить';
+    btn.addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+    modalContent.appendChild(btn);
+    return;
+  }
+
+  const isFav = await isFavorite(key);
+  btn.classList.toggle('active', isFav);
+  btn.innerHTML = isFav ? '⭐ В избранном' : '☆ В избранное';
+
+  btn.addEventListener('click', async (e) => {
     e.stopPropagation();
-    const now = Store.toggleFavorite({ key, source, article, title, page });
-    btn.classList.toggle('active', now);
-    btn.innerHTML = now ? '⭐ В избранном' : '☆ В избранное';
+    if (btn.classList.contains('active')) {
+      await removeFavorite(key);
+      btn.classList.remove('active');
+      btn.innerHTML = '☆ В избранное';
+    } else {
+      await addFavorite({ key, source, article, title, page });
+      btn.classList.add('active');
+      btn.innerHTML = '⭐ В избранном';
+    }
   });
 
   modalContent.appendChild(btn);
 };
 
-// Добавляет в историю
-window.pushToHistory = function(source, article, title, page) {
+window.pushToHistory = async function(source, article, title, page) {
+  const user = await getUser();
+  if (!user) return;
   const key = makeKey(source, article);
-  Store.pushHistory({ key, source, article, title, page });
+  await pushHistory({ key, source, article, title, page });
 };

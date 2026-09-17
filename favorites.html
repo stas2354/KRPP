@@ -18,18 +18,21 @@
       <li><a href="koap.html">КоАП</a></li>
       <li><a href="fractions.html">Фракции</a></li>
       <li><a href="favorites.html" class="active">⭐ Закладки</a></li>
+      <li><a href="profile.html">👤 Профиль</a></li>
     </ul>
     <button id="themeToggle" class="theme-toggle" title="Сменить тему">☀️</button>
   </nav>
 
   <div class="container">
     <h1>⭐ Мои закладки</h1>
-    <p class="subtitle">Статьи, которые вы сохранили</p>
+    <p class="subtitle" id="favSubtitle">Статьи, которые вы сохранили</p>
 
     <div class="fav-actions">
       <button id="clearFavorites" class="secondary hidden">🗑 Очистить избранное</button>
     </div>
-    <div id="favoritesList" class="fav-list"></div>
+    <div id="favoritesList" class="fav-list">
+      <p class="muted">Загрузка...</p>
+    </div>
 
     <h1 style="margin-top: 3rem;">🕒 История просмотров</h1>
     <p class="subtitle">Последние 10 открытых статей</p>
@@ -37,9 +40,13 @@
     <div class="fav-actions">
       <button id="clearHistory" class="secondary hidden">🗑 Очистить историю</button>
     </div>
-    <div id="historyList" class="fav-list"></div>
+    <div id="historyList" class="fav-list">
+      <p class="muted">Загрузка...</p>
+    </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/favorites-page.js"></script>
   <script src="js/theme.js"></script>

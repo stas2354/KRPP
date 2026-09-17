@@ -1,13 +1,19 @@
-// ============================================================
-// Страница избранного и история
-// ============================================================
-
-(function() {
+(async function() {
   const favList = document.getElementById('favoritesList');
   const histList = document.getElementById('historyList');
   const clearFavBtn = document.getElementById('clearFavorites');
   const clearHistBtn = document.getElementById('clearHistory');
+  const subtitle = document.getElementById('favSubtitle');
   if (!favList) return;
+
+  const user = await getUser();
+
+  if (!user) {
+    if (subtitle) subtitle.innerHTML = 'Войдите в аккаунт, чтобы видеть закладки. <a href="login.html" style="color: var(--accent);">Войти →</a>';
+    favList.innerHTML = '<p class="muted">Требуется вход в аккаунт.</p>';
+    histList.innerHTML = '<p class="muted">Требуется вход в аккаунт.</p>';
+    return;
+  }
 
   function esc(s) {
     const d = document.createElement('div');
@@ -16,30 +22,28 @@
   }
 
   function itemHTML(item, type) {
-    const date = type === 'fav'
-      ? new Date(item.addedAt)
-      : new Date(item.viewedAt);
+    const date = new Date(type === 'fav' ? item.added_at : item.viewed_at);
     const dateStr = date.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
     return `
       <div class="fav-item">
-        <a href="${item.page}#art-${item.article}" class="fav-item-link">
+        <a href="${item.page}" class="fav-item-link">
           <div class="fav-item-head">
-            <span class="fav-item-source">${item.source}</span>
+            <span class="fav-item-source">${esc(item.source)}</span>
             <span class="fav-item-num">Статья ${esc(item.article)}</span>
           </div>
           <div class="fav-item-title">${esc(item.title)}</div>
           <div class="fav-item-date">${dateStr}</div>
         </a>
-        <button class="fav-remove" data-key="${esc(item.key)}" data-type="${type}" title="Удалить">✕</button>
+        ${type === 'fav' ? `<button class="fav-remove" data-key="${esc(item.article_key)}" title="Удалить">✕</button>` : ''}
       </div>
     `;
   }
 
-  function renderFavorites() {
-    const favs = Store.getFavorites();
+  async function renderFavorites() {
+    const favs = await getFavorites();
     if (!favs.length) {
-      favList.innerHTML = '<p class="muted">Пока ничего не добавлено в избранное.<br>Нажми ⭐ на статье чтобы сохранить её здесь.</p>';
+      favList.innerHTML = '<p class="muted">Пока ничего не добавлено. Нажми ⭐ на статье чтобы сохранить её здесь.</p>';
       clearFavBtn.classList.add('hidden');
       return;
     }
@@ -47,44 +51,37 @@
     favList.innerHTML = favs.map(f => itemHTML(f, 'fav')).join('');
   }
 
-  function renderHistory() {
-    if (!histList) return;
-    const hist = Store.getHistory();
+  async function renderHistory() {
+    const hist = await getHistory();
     if (!hist.length) {
-      histList.innerHTML = '<p class="muted">История пуста. Просмотренные статьи будут появляться здесь.</p>';
-      clearHistBtn?.classList.add('hidden');
+      histList.innerHTML = '<p class="muted">История пуста.</p>';
+      clearHistBtn.classList.add('hidden');
       return;
     }
-    clearHistBtn?.classList.remove('hidden');
+    clearHistBtn.classList.remove('hidden');
     histList.innerHTML = hist.map(h => itemHTML(h, 'hist')).join('');
   }
 
-  // Удаление
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.fav-remove');
     if (!btn) return;
-    const key = btn.dataset.key;
-    const type = btn.dataset.type;
-    if (type === 'fav') {
-      Store.removeFavorite(key);
-      renderFavorites();
-    }
+    await removeFavorite(btn.dataset.key);
+    renderFavorites();
   });
 
-  clearFavBtn?.addEventListener('click', () => {
-    if (confirm('Очистить всё избранное?')) {
-      localStorage.removeItem('favorites');
-      renderFavorites();
-    }
+  clearFavBtn?.addEventListener('click', async () => {
+    if (!confirm('Очистить всё избранное?')) return;
+    const favs = await getFavorites();
+    for (const f of favs) await removeFavorite(f.article_key);
+    renderFavorites();
   });
 
-  clearHistBtn?.addEventListener('click', () => {
-    if (confirm('Очистить историю?')) {
-      Store.clearHistory();
-      renderHistory();
-    }
+  clearHistBtn?.addEventListener('click', async () => {
+    if (!confirm('Очистить историю?')) return;
+    await clearHistory();
+    renderHistory();
   });
 
-  renderFavorites();
-  renderHistory();
+  await renderFavorites();
+  await renderHistory();
 })();
