@@ -1,4 +1,3 @@
-// Логика страницы фракций
 (function() {
   const grid = document.getElementById('fractionsGrid');
   const searchInput = document.getElementById('search');
@@ -16,12 +15,7 @@
       if (!q) return true;
       return (f.name + ' ' + f.fullName + ' ' + f.description + ' ' + f.duties.join(' ')).toLowerCase().includes(q);
     });
-
-    if (!items.length) {
-      grid.innerHTML = '<p class="muted">Ничего не найдено</p>';
-      return;
-    }
-
+    if (!items.length) { grid.innerHTML = '<p class="muted">Ничего не найдено</p>'; return; }
     grid.innerHTML = items.map(f => `
       <div class="fraction-card" style="--fc1:${f.color}; --fc2:${f.color2};" onclick="openFraction('${f.id}')">
         <div class="fraction-emoji">${f.emoji}</div>
@@ -36,8 +30,7 @@
   window.openFraction = function(id) {
     const f = FRACTIONS.find(x => x.id === id);
     if (!f) return;
-    const mc = document.getElementById('modalContent');
-    mc.innerHTML = `
+    document.getElementById('modalContent').innerHTML = `
       <div class="fraction-header" style="--fc1:${f.color}; --fc2:${f.color2};">
         <div class="fraction-emoji-large">${f.emoji}</div>
         <h2>${esc(f.name)}</h2>
@@ -45,31 +38,18 @@
         <div class="fraction-lead">Руководитель: <b>${esc(f.leadership)}</b></div>
       </div>
       <p style="margin: 1rem 0; line-height: 1.6;">${esc(f.description)}</p>
-
       <div class="fraction-section">
         <h4>📋 Обязанности</h4>
-        <ul class="fraction-list">
-          ${f.duties.map(d => `<li>${esc(d)}</li>`).join('')}
-        </ul>
+        <ul class="fraction-list">${f.duties.map(d => `<li>${esc(d)}</li>`).join('')}</ul>
       </div>
-
       <div class="fraction-section">
         <h4>⚖️ Права</h4>
-        <ul class="fraction-list">
-          ${f.rights.map(r => `<li>${esc(r)}</li>`).join('')}
-        </ul>
+        <ul class="fraction-list">${f.rights.map(r => `<li>${esc(r)}</li>`).join('')}</ul>
       </div>
-
       <div class="fraction-section">
         <h4>🎖️ Звания</h4>
-        <div class="ranks-chain">
-          ${f.ranks.map((r, i) => `
-            <span class="rank-item">${esc(r)}</span>
-            ${i < f.ranks.length - 1 ? '<span class="rank-arrow">→</span>' : ''}
-          `).join('')}
-        </div>
+        <div class="ranks-chain">${f.ranks.map((r, i) => `<span class="rank-item">${esc(r)}</span>${i < f.ranks.length - 1 ? '<span class="rank-arrow">→</span>' : ''}`).join('')}</div>
       </div>
-
       <div class="fraction-section">
         <h4>👔 Форма</h4>
         <p>${esc(f.uniform)}</p>
@@ -78,13 +58,9 @@
     document.getElementById('modal').classList.add('active');
   };
 
-  if (searchInput) {
-    searchInput.addEventListener('input', () => render(searchInput.value));
-  }
-
+  if (searchInput) searchInput.addEventListener('input', () => render(searchInput.value));
   document.getElementById('modal').addEventListener('click', e => {
     if (e.target.id === 'modal') e.currentTarget.classList.remove('active');
   });
-
   render();
 })();

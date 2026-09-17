@@ -7,15 +7,18 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-      <button class="burger" id="burger" aria-label="Меню">
+  <nav>
+    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
+    <button class="burger" id="burger" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
     <ul id="navMenu">
-      <li><a href="index.html" class="active">Главная</a></li>
-      <li><a href="uk.html">УК</a></li>
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="uk.html" class="active">УК</a></li>
       <li><a href="koap.html">КоАП</a></li>
       <li><a href="fractions.html">Фракции</a></li>
     </ul>
+  </nav>
 
   <div class="container">
     <h1>📕 Уголовный кодекс</h1>
@@ -43,30 +46,19 @@
     </div>
   </div>
 
-    <script src="js/data.js"></script>
+  <script src="js/data.js"></script>
   <script src="js/uk.js"></script>
   <script src="js/mobile.js"></script>
   <script>
-    // Автооткрытие статьи, если пришёл из поиска
     window.addEventListener('load', () => {
       const artNum = sessionStorage.getItem('openArticle');
       const source = sessionStorage.getItem('openSource');
       if (!artNum) return;
-
-      // Проверяем, что статья из нужного документа
-      const expectedSource = document.title.includes('КоАП') ? 'КоАП' : 'УК';
-      if (source !== expectedSource) return;
-
+      if (source !== 'УК') return;
       sessionStorage.removeItem('openArticle');
       sessionStorage.removeItem('openSource');
-
-      // Ищем статью
-      const data = typeof UK_ARTICLES !== 'undefined' ? UK_ARTICLES :
-                   typeof KOAP_ARTICLES !== 'undefined' ? KOAP_ARTICLES : [];
-      const idx = data.findIndex(a => a.article === artNum);
-      if (idx >= 0 && typeof openArticle === 'function') {
-        setTimeout(() => openArticle(idx), 100);
-      }
+      const idx = UK_ARTICLES.findIndex(a => a.article === artNum);
+      if (idx >= 0 && typeof openArticle === 'function') setTimeout(() => openArticle(idx), 100);
     });
   </script>
 </body>

@@ -9,10 +9,14 @@
 <body>
   <nav>
     <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
-    <ul>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
       <li><a href="index.html" class="active">Главная</a></li>
       <li><a href="uk.html">УК</a></li>
       <li><a href="koap.html">КоАП</a></li>
+      <li><a href="fractions.html">Фракции</a></li>
     </ul>
   </nav>
 
@@ -38,11 +42,16 @@
         <h3>КоАП</h3>
         <p>Административные правонарушения, штрафы и аресты в КПЗ.</p>
       </a>
+      <a href="fractions.html" class="card">
+        <div class="icon">🏛️</div>
+        <h3>Фракции</h3>
+        <p>ФСБ, МВД, Армия, Правительство — структура, права, звания.</p>
+      </a>
     </div>
   </div>
 
   <script src="js/data.js"></script>
   <script src="js/search.js"></script>
-    <script src="js/mobile.js"></script>
+  <script src="js/mobile.js"></script>
 </body>
 </html>
