@@ -24,8 +24,11 @@
     <h1>📘 КоАП</h1>
     <p class="subtitle">Республика Йойград</p>
 
-    <div class="search-bar">
+    <div class="filters-row">
       <input type="text" id="search" placeholder="🔍 Поиск по статьям...">
+      <select id="chapterSelect">
+        <option value="all">📖 Все главы</option>
+      </select>
       <select id="jurisdiction">
         <option value="all">Все юрисдикции</option>
         <option value="Административная">Административные</option>
@@ -33,7 +36,7 @@
       </select>
     </div>
 
-    <div class="tabs" id="chapterTabs"></div>
+    <div class="articles-count" id="count"></div>
     <div id="articles"></div>
   </div>
 
@@ -44,14 +47,14 @@
     </div>
   </div>
 
-    <script src="js/data-koap.js"></script>
+  <script src="js/data-koap.js"></script>
   <script src="js/koap.js"></script>
+  <script src="js/mobile.js"></script>
   <script>
     window.addEventListener('load', () => {
       const artNum = sessionStorage.getItem('openArticle');
       const source = sessionStorage.getItem('openSource');
-      if (!artNum) return;
-      if (source !== 'КоАП') return;
+      if (!artNum || source !== 'КоАП') return;
       sessionStorage.removeItem('openArticle');
       sessionStorage.removeItem('openSource');
       const idx = KOAP_ARTICLES.findIndex(a => a.article === artNum);

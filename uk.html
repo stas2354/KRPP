@@ -24,8 +24,11 @@
     <h1>📕 Уголовный кодекс</h1>
     <p class="subtitle">Республика Йойград</p>
 
-    <div class="search-bar">
+    <div class="filters-row">
       <input type="text" id="search" placeholder="🔍 Поиск по статьям...">
+      <select id="chapterSelect">
+        <option value="all">📖 Все главы</option>
+      </select>
       <select id="jurisdiction">
         <option value="all">Все юрисдикции</option>
         <option value="Федеральная">Федеральные</option>
@@ -35,7 +38,7 @@
       </select>
     </div>
 
-    <div class="tabs" id="chapterTabs"></div>
+    <div class="articles-count" id="count"></div>
     <div id="articles"></div>
   </div>
 
