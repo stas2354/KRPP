@@ -82,7 +82,6 @@
   <script src="js/storage.js"></script>
   <script src="js/theme.js"></script>
   <script>
-    // Переключение вкладок
     document.querySelectorAll('.login-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
@@ -93,7 +92,6 @@
       });
     });
 
-    // Вход
     document.getElementById('loginBtn').addEventListener('click', async () => {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
@@ -102,6 +100,12 @@
 
       if (!email || !password) {
         err.textContent = 'Заполни все поля';
+        err.classList.remove('hidden');
+        return;
+      }
+
+      if (typeof signIn !== 'function') {
+        err.textContent = 'Ошибка: Supabase не загрузился. Обнови страницу (Ctrl+Shift+R).';
         err.classList.remove('hidden');
         return;
       }
@@ -116,7 +120,6 @@
       window.location.href = 'profile.html';
     });
 
-    // Регистрация
     document.getElementById('registerBtn').addEventListener('click', async () => {
       const username = document.getElementById('registerUsername').value.trim();
       const email = document.getElementById('registerEmail').value.trim();
@@ -135,6 +138,12 @@
         return;
       }
 
+      if (typeof signUp !== 'function') {
+        err.textContent = 'Ошибка: Supabase не загрузился. Обнови страницу (Ctrl+Shift+R).';
+        err.classList.remove('hidden');
+        return;
+      }
+
       const { error } = await signUp(email, password, username);
       if (error) {
         err.textContent = error.message;
@@ -142,17 +151,18 @@
         return;
       }
 
-      alert('Аккаунт создан! Проверь почту и подтверди email, потом войди.');
+      alert('Аккаунт создан! Теперь войдите.');
       document.querySelector('[data-tab="login"]').click();
     });
 
-    // Google OAuth
     document.getElementById('googleBtn').addEventListener('click', async () => {
-      await signInWithGoogle();
+      if (typeof signInWithGoogle === 'function') {
+        await signInWithGoogle();
+      }
     });
 
-    // Если уже залогинен — на профиль
     (async () => {
+      if (typeof getUser !== 'function') return;
       const user = await getUser();
       if (user) window.location.href = 'profile.html';
     })();
