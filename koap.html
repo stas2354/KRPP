@@ -3,34 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>УК Республики Йойград</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <title>КоАП Республики Йойград</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-code="uk">
+<body>
   <nav>
     <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
     <ul>
-      <li><a href="/">Главная</a></li>
-      <li><a href="/uk.html" class="active">УК</a></li>
-      <li><a href="/koap.html">КоАП</a></li>
-      <li><a href="/ai.html">ИИ-помощник</a></li>
-      <li><a href="/admin.html" id="adminLink" class="hidden">Админка</a></li>
-      <li><a href="/login.html" id="loginLink">Войти</a></li>
-      <li><a href="#" id="logoutLink" class="hidden">Выйти</a></li>
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="uk.html">УК</a></li>
+      <li><a href="koap.html" class="active">КоАП</a></li>
     </ul>
   </nav>
 
   <div class="container">
-    <h1>📕 Уголовный кодекс</h1>
+    <h1>📘 КоАП</h1>
     <p class="subtitle">Республика Йойград</p>
 
     <div class="search-bar">
       <input type="text" id="search" placeholder="🔍 Поиск по статьям...">
       <select id="jurisdiction">
         <option value="all">Все юрисдикции</option>
-        <option value="Федеральная">Федеральные</option>
-        <option value="Региональная">Региональные</option>
-        <option value="Военная">Военные</option>
+        <option value="Административная">Административные</option>
         <option value="Общая">Общие</option>
       </select>
     </div>
@@ -46,7 +40,7 @@
     </div>
   </div>
 
-  <script src="/js/auth.js"></script>
-  <script src="/js/uk.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/koap.js"></script>
 </body>
 </html>
