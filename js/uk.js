@@ -74,6 +74,12 @@
       ${p.punishment ? `<div class="punish"><b>⚖️ Наказание:</b><br>${esc(p.punishment)}</div>` : ''}
       ${p.bail ? `<div class="punish"><b>💰 Залог:</b> ${p.bail.toLocaleString('ru-RU')} КРРП рублей</div>` : ''}
     `;
+
+    if (typeof attachFavoriteButton === 'function') {
+      attachFavoriteButton('УК', p.article, p.title, 'uk.html');
+      pushToHistory('УК', p.article, p.title, 'uk.html');
+    }
+
     document.getElementById('modal').classList.add('active');
   };
 

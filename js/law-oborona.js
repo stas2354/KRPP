@@ -61,6 +61,12 @@
       <div class="chapter-tag">${esc(p.chapter)}</div>
       <div class="content">${esc(p.content)}</div>
     `;
+
+    if (typeof attachFavoriteButton === 'function') {
+      attachFavoriteButton('Закон об обороне', p.article, p.title, 'law-oborona.html');
+      pushToHistory('Закон об обороне', p.article, p.title, 'law-oborona.html');
+    }
+
     document.getElementById('modal').classList.add('active');
   };
 

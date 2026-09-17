@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мои закладки | Республика Йойград</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="uk.html">УК</a></li>
+      <li><a href="koap.html">КоАП</a></li>
+      <li><a href="fractions.html">Фракции</a></li>
+      <li><a href="favorites.html" class="active">⭐ Закладки</a></li>
+    </ul>
+    <button id="themeToggle" class="theme-toggle" title="Сменить тему">☀️</button>
+  </nav>
+
+  <div class="container">
+    <h1>⭐ Мои закладки</h1>
+    <p class="subtitle">Статьи, которые вы сохранили</p>
+
+    <div class="fav-actions">
+      <button id="clearFavorites" class="secondary hidden">🗑 Очистить избранное</button>
+    </div>
+    <div id="favoritesList" class="fav-list"></div>
+
+    <h1 style="margin-top: 3rem;">🕒 История просмотров</h1>
+    <p class="subtitle">Последние 10 открытых статей</p>
+
+    <div class="fav-actions">
+      <button id="clearHistory" class="secondary hidden">🗑 Очистить историю</button>
+    </div>
+    <div id="historyList" class="fav-list"></div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/favorites-page.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/mobile.js"></script>
+</body>
+</html>
