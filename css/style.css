@@ -1683,4 +1683,151 @@ a.fraction-card { display: block; color: inherit; }
   background: #f0f2f6;
   border-color: #d8dde5;
 }
-  
+  /* ==================== АДМИНКА ==================== */
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+.admin-tab {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.admin-tab.active {
+  background: var(--accent);
+  color: #0a0d14;
+  border-color: var(--accent);
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+.stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.3rem; }
+.stat-label { color: var(--text-dim); font-size: 0.85rem; }
+
+.admin-info {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.admin-info h3 { color: var(--accent); margin-bottom: 1rem; }
+.admin-info p { margin-bottom: 0.5rem; color: var(--text); }
+.admin-info b { color: var(--accent); }
+
+.admin-denied {
+  text-align: center;
+  padding: 3rem;
+}
+.admin-denied h2 { color: var(--danger); margin-bottom: 1rem; }
+
+.admin-toolbar {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.admin-toolbar input, .admin-toolbar select { margin-bottom: 0; }
+
+.admin-articles-list, .admin-edits-list, .admin-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.admin-article-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+.admin-article-item:hover { border-color: var(--accent); }
+.admin-article-num { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+.admin-article-title { font-weight: 500; }
+.admin-article-actions button { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+
+.admin-edit-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 1.2rem;
+}
+.admin-edit-item.status-approved { border-left-color: var(--success); }
+.admin-edit-item.status-rejected { border-left-color: var(--danger); }
+.admin-edit-item.status-pending { border-left-color: #f5b041; }
+
+.admin-edit-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.7rem;
+  color: var(--text-dim);
+}
+.admin-edit-source { color: var(--accent); font-weight: 600; }
+.admin-edit-article { font-weight: 600; color: var(--text); }
+.admin-edit-status { margin-left: auto; }
+.admin-edit-title { font-weight: 600; margin-bottom: 0.4rem; }
+.admin-edit-preview { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; }
+.admin-edit-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.admin-edit-actions button { padding: 0.5rem 1rem; font-size: 0.85rem; }
+
+.admin-user-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.admin-user-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color: #0a0d14;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.admin-user-info { flex: 1; }
+.admin-user-name { font-weight: 600; }
+.admin-user-role { color: var(--text-dim); font-size: 0.8rem; margin-top: 0.2rem; }
+.admin-role-select { margin-bottom: 0; max-width: 180px; }
+
+.edit-actions { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+
+@media (max-width: 768px) {
+  .admin-toolbar { grid-template-columns: 1fr; }
+  .admin-article-item { flex-direction: column; align-items: stretch; }
+  .admin-role-select { max-width: 100%; }
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
+}

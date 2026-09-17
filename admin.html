@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Админка | Республика Йойград</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="uk.html">УК</a></li>
+      <li><a href="koap.html">КоАП</a></li>
+      <li><a href="fractions.html">Фракции</a></li>
+      <li><a href="favorites.html">⭐ Закладки</a></li>
+      <li><a href="admin.html" class="active">🔐 Админка</a></li>
+      <li><a href="profile.html" id="profileLink">👤 Профиль</a></li>
+    </ul>
+    <button id="themeToggle" class="theme-toggle" title="Сменить тему">☀️</button>
+  </nav>
+
+  <div class="container">
+    <h1>🔐 Админ-панель</h1>
+    <p class="subtitle" id="adminSubtitle">Загрузка...</p>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="dashboard">📊 Дашборд</button>
+      <button class="admin-tab" data-tab="articles">📝 Статьи</button>
+      <button class="admin-tab" data-tab="edits">✏️ Правки</button>
+      <button class="admin-tab" data-tab="users">👥 Пользователи</button>
+    </div>
+
+    <div id="adminContent">
+      <p class="muted">Загрузка...</p>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <div id="modalContent"></div>
+      <button class="secondary" style="margin-top: 1.5rem;" onclick="document.getElementById('modal').classList.remove('active')">Закрыть</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data-uk.js"></script>
+  <script src="js/data-koap.js"></script>
+  <script src="js/data-law-oborona.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/mobile.js"></script>
+</body>
+</html>
