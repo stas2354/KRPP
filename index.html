@@ -45,14 +45,46 @@
       <a href="fractions.html" class="card">
         <div class="icon">🏛️</div>
         <h3>Фракции</h3>
-        <p>ФСБ, МВД, Армия, Правительство — структура, права, звания.</p>
+        <p>ФСБ, МВД, Армия, ветви власти — структура, права, звания.</p>
       </a>
+    </div>
+
+    <!-- 🧑‍⚖️ ИИ-ЮРИСТ -->
+    <div class="ai-block">
+      <div class="ai-header">
+        <div class="ai-avatar">🧑‍⚖️</div>
+        <div>
+          <h2>Юрист Республики Йойград</h2>
+          <p class="ai-subtitle">Спроси о законах или фракциях — отвечу со ссылками на статьи</p>
+        </div>
+      </div>
+
+      <div class="ai-chat" id="aiChat">
+        <div class="ai-msg ai-msg-assistant">
+          Здравствуйте. Я — юридический помощник Республики Йойград. Задайте вопрос по УК, КоАП или фракциям — отвечу со ссылками на статьи.
+        </div>
+      </div>
+
+      <div class="ai-input-row">
+        <input type="text" id="aiInput" placeholder="Например: что грозит за убийство?" autocomplete="off">
+        <button id="aiSend">Спросить</button>
+      </div>
+
+      <div class="ai-hints">
+        <span class="ai-hint" data-q="Какое наказание за убийство?">Что грозит за убийство?</span>
+        <span class="ai-hint" data-q="Что такое необходимая оборона?">Необходимая оборона</span>
+        <span class="ai-hint" data-q="Какие права у сотрудников ФСБ?">Права ФСБ</span>
+        <span class="ai-hint" data-q="Что грозит за угон автомобиля?">Наказание за угон</span>
+      </div>
     </div>
   </div>
 
   <script src="js/data-uk.js"></script>
   <script src="js/data-koap.js"></script>
+  <script src="js/data-fractions.js"></script>
   <script src="js/search.js"></script>
+  <script src="js/ai.js"></script>
   <script src="js/mobile.js"></script>
+  <script src="https://js.puter.com/v2/"></script>
 </body>
 </html>
