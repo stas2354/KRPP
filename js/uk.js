@@ -3,25 +3,33 @@
   const articlesEl = document.getElementById('articles');
   const searchInput = document.getElementById('search');
   const jurisdictionSelect = document.getElementById('jurisdiction');
-  const chapterSelect = document.getElementById('chapterSelect');
-  const countEl = document.getElementById('count');
+  const chapterTabs = document.getElementById('chapterTabs');
 
+  let activeChapter = 'all';
   let searchTimeout;
 
-  // Заполняем список глав
+  // Заполняем кнопки глав
   function loadChapters() {
-    const chapters = [...new Set(data.map(a => a.chapter))].filter(Boolean).sort();
-    chapterSelect.innerHTML = '<option value="all">📖 Все главы</option>' +
-      chapters.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    const chapters = [...new Set(data.map(a => a.chapter))].filter(Boolean);
+    chapterTabs.innerHTML =
+      `<button class="active" data-chapter="all">Все главы</button>` +
+      chapters.map(c => `<button data-chapter="${esc(c)}">${esc(c)}</button>`).join('');
+
+    chapterTabs.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        chapterTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeChapter = btn.dataset.chapter;
+        render();
+      });
+    });
   }
 
   function getFiltered() {
     const search = searchInput.value.trim().toLowerCase();
     const jurisdiction = jurisdictionSelect.value;
-    const chapter = chapterSelect.value;
-
     return data.filter(a => {
-      if (chapter !== 'all' && a.chapter !== chapter) return false;
+      if (activeChapter !== 'all' && a.chapter !== activeChapter) return false;
       if (jurisdiction !== 'all' && a.jurisdiction !== jurisdiction) return false;
       if (search) {
         const hay = (a.title + ' ' + a.content + ' ' + a.article).toLowerCase();
@@ -33,13 +41,10 @@
 
   function render() {
     const items = getFiltered();
-    countEl.textContent = `Найдено статей: ${items.length}`;
-
     if (!items.length) {
       articlesEl.innerHTML = '<p class="muted">Ничего не найдено</p>';
       return;
     }
-
     articlesEl.innerHTML = items.map(p => {
       const idx = data.indexOf(p);
       return `<div class="article" data-idx="${idx}">
@@ -91,7 +96,6 @@
     searchTimeout = setTimeout(render, 200);
   });
   jurisdictionSelect.addEventListener('change', render);
-  chapterSelect.addEventListener('change', render);
 
   document.getElementById('modal').addEventListener('click', e => {
     if (e.target.id === 'modal') e.currentTarget.classList.remove('active');
