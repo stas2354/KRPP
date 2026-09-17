@@ -947,3 +947,111 @@ a.fraction-card { display: block; color: inherit; }
   .ai-input-row { flex-direction: column; }
   .ai-input-row button { width: 100%; }
 }
+/* ==================== ЗАКОН ФРАКЦИИ ==================== */
+.law-block {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #1a1f2b 0%, #12161f 100%);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: 14px;
+  padding: 2rem;
+}
+.law-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+.law-stamp {
+  font-size: 3rem;
+  background: rgba(201,162,39,0.1);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.law-title {
+  color: var(--accent);
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.law-preamble {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+.law-articles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.law-article {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.law-article[open] {
+  border-color: var(--accent);
+}
+.law-article summary {
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+  user-select: none;
+  transition: background 0.15s;
+}
+.law-article summary::-webkit-details-marker { display: none; }
+.law-article summary::after {
+  content: '▸';
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.2rem;
+  transition: transform 0.2s;
+}
+.law-article[open] summary::after { transform: rotate(90deg); }
+.law-article summary:hover { background: var(--bg-hover); }
+.law-num {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(201,162,39,0.1);
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.law-art-title {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.law-art-content {
+  padding: 1.2rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .law-block { padding: 1.2rem; }
+  .law-header { flex-direction: column; gap: 0.8rem; }
+  .law-stamp { width: 56px; height: 56px; font-size: 2.2rem; }
+  .law-title { font-size: 1.1rem; }
+  .law-article summary { padding: 0.85rem 1rem; flex-wrap: wrap; }
+  .law-num { font-size: 0.78rem; padding: 0.25rem 0.55rem; }
+  .law-art-title { font-size: 0.88rem; }
+  .law-art-content { padding: 1rem; font-size: 0.85rem; }
+}

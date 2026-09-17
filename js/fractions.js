@@ -4,6 +4,16 @@
   const searchInput = document.getElementById('search');
   if (!powerGrid) return;
 
+  // Карта: id фракции → путь к её странице
+  const PAGE_MAP = {
+    'army': 'army.html',
+    'fsb': 'fraction.html?id=fsb',
+    'mvd': 'fraction.html?id=mvd',
+    'gov-executive': 'fraction.html?id=gov-executive',
+    'gov-judicial': 'fraction.html?id=gov-judicial',
+    'gov-legislative': 'fraction.html?id=gov-legislative'
+  };
+
   function esc(s) {
     const d = document.createElement('div');
     d.textContent = s ?? '';
@@ -11,8 +21,9 @@
   }
 
   function cardHTML(f) {
+    const href = PAGE_MAP[f.id] || ('fraction.html?id=' + f.id);
     return `
-      <a href="fraction.html?id=${f.id}" class="fraction-card" style="--fc1:${f.color}; --fc2:${f.color2}; text-decoration: none;">
+      <a href="${href}" class="fraction-card" style="--fc1:${f.color}; --fc2:${f.color2}; text-decoration: none;">
         <div class="fraction-emoji">${f.emoji}</div>
         <h3>${esc(f.name)}</h3>
         <div class="fraction-full">${esc(f.fullName)}</div>
