@@ -60,7 +60,6 @@
       <h2>${esc(p.title)}</h2>
       <div class="chapter-tag">${esc(p.chapter)}</div>
       <div class="content">${esc(p.content)}</div>
-      <div id="commentsSection"></div>
     `;
 
     if (typeof attachFavoriteButton === 'function') {
