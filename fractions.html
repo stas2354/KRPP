@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Фракции Республики Йойград</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="uk.html">УК</a></li>
+      <li><a href="koap.html">КоАП</a></li>
+      <li><a href="fractions.html" class="active">Фракции</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1>🏛️ Фракции</h1>
+    <p class="subtitle">Государственные структуры Республики Йойград</p>
+
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="🔍 Поиск по фракциям...">
+    </div>
+
+    <div class="fractions-grid" id="fractionsGrid"></div>
+  </div>
+
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <div id="modalContent"></div>
+      <button class="secondary" style="margin-top: 1.5rem;" onclick="document.getElementById('modal').classList.remove('active')">Закрыть</button>
+    </div>
+  </div>
+
+  <script src="js/data-fractions.js"></script>
+  <script src="js/fractions.js"></script>
+  <script src="js/mobile.js"></script>
+</body>
+</html>

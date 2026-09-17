@@ -7,14 +7,15 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <nav>
-    <div class="logo">⚖️ РЕСПУБЛИКА ЙОЙГРАД</div>
-    <ul>
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="uk.html" class="active">УК</a></li>
+      <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="index.html" class="active">Главная</a></li>
+      <li><a href="uk.html">УК</a></li>
       <li><a href="koap.html">КоАП</a></li>
+      <li><a href="fractions.html">Фракции</a></li>
     </ul>
-  </nav>
 
   <div class="container">
     <h1>📕 Уголовный кодекс</h1>
@@ -44,6 +45,7 @@
 
     <script src="js/data.js"></script>
   <script src="js/uk.js"></script>
+  <script src="js/mobile.js"></script>
   <script>
     // Автооткрытие статьи, если пришёл из поиска
     window.addEventListener('load', () => {
