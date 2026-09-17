@@ -73,15 +73,28 @@
       const context = buildContext();
       const fullPrompt = SYSTEM_PROMPT + context + '\n\nВОПРОС ГРАЖДАНИНА: ' + question;
 
-      let answer;
-      if (typeof puter !== 'undefined' && puter.ai) {
-        const resp = await puter.ai.chat(fullPrompt, { model: 'gpt-4o-mini' });
-        answer = resp?.message?.content || resp?.toString?.() || String(resp);
-      } else {
-        answer = '❌ ИИ-сервис не загрузился. Проверьте интернет-соединение и обновите страницу.';
+      const response = await fetch('https://text.pollinations.ai/openai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'openai',
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT + context },
+            { role: 'user', content: question }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Сервис вернул ошибку ' + response.status);
       }
 
-      thinking.textContent = answer || 'Не удалось получить ответ.';
+      const data = await response.json();
+      const answer = data?.choices?.[0]?.message?.content
+        || data?.message?.content
+        || (typeof data === 'string' ? data : 'Не удалось получить ответ.');
+
+      thinking.textContent = answer;
     } catch (e) {
       console.error(e);
       thinking.textContent = '❌ Ошибка: ' + (e?.message || 'не удалось получить ответ. Попробуйте позже.');
