@@ -5,17 +5,17 @@
 const SUPABASE_URL = 'https://puyypvadgvrizgulduxx.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nrxBSnrQNxH0mnVG0IEfRA_FIJOfwm2';
 
-let supabase = null;
+let sbClient = null;
 
 async function initSupabase() {
-  if (supabase) return supabase;
+  if (sbClient) return sbClient;
 
   if (typeof window.supabase === 'undefined') {
     console.error('Supabase JS не загружен. Добавь CDN скрипт.');
     return null;
   }
 
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
@@ -23,7 +23,7 @@ async function initSupabase() {
     }
   });
 
-  return supabase;
+  return sbClient;
 }
 
 // ============================================================
