@@ -24,11 +24,8 @@
     <h1>📕 Уголовный кодекс</h1>
     <p class="subtitle">Республика Йойград</p>
 
-    <div class="filters-row">
+    <div class="search-bar">
       <input type="text" id="search" placeholder="🔍 Поиск по статьям...">
-      <select id="chapterSelect">
-        <option value="all">📖 Все главы</option>
-      </select>
       <select id="jurisdiction">
         <option value="all">Все юрисдикции</option>
         <option value="Федеральная">Федеральные</option>
@@ -38,7 +35,7 @@
       </select>
     </div>
 
-    <div class="articles-count" id="count"></div>
+    <div class="tabs" id="chapterTabs"></div>
     <div id="articles"></div>
   </div>
 
@@ -51,12 +48,12 @@
 
   <script src="js/data-uk.js"></script>
   <script src="js/uk.js"></script>
-  <script src="js/mobile.js"></script>
   <script>
     window.addEventListener('load', () => {
       const artNum = sessionStorage.getItem('openArticle');
       const source = sessionStorage.getItem('openSource');
-      if (!artNum || source !== 'УК') return;
+      if (!artNum) return;
+      if (source !== 'УК') return;
       sessionStorage.removeItem('openArticle');
       sessionStorage.removeItem('openSource');
       const idx = UK_ARTICLES.findIndex(a => a.article === artNum);
