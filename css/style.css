@@ -566,6 +566,54 @@ mark {
   .article-title { font-size: 0.95rem; }
   .modal { padding: 1.2rem; }
 }
+/* Фильтры в ряд */
+.filters-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.filters-row input,
+.filters-row select {
+  margin-bottom: 0;
+}
+
+/* Счётчик статей */
+.articles-count {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  padding-left: 0.3rem;
+}
+
+/* Метка главы в модалке */
+.chapter-tag {
+  display: inline-block;
+  background: rgba(201,162,39,0.1);
+  border-left: 3px solid var(--accent);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+/* Красивое выпадающее меню */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c9a227' stroke-width='3'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Адаптив для фильтров */
+@media (max-width: 768px) {
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
+}
 /* ==================== АДАПТИВ ==================== */
 @media (max-width: 768px) {
   nav {
