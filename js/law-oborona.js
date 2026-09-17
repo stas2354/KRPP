@@ -88,6 +88,11 @@
     if (e.target.id === 'modal') e.currentTarget.classList.remove('active');
   });
 
-  loadChapters();
-  render();
+  (async () => {
+    if (typeof applyApprovedEdits === 'function') {
+      try { await applyApprovedEdits('Закон об обороне'); } catch (e) { console.warn(e); }
+    }
+    loadChapters();
+    render();
+  })();
 })();

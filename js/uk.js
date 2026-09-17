@@ -108,6 +108,18 @@
     if (e.target.id === 'modal') e.currentTarget.classList.remove('active');
   });
 
-  loadChapters();
-  render();
+  // === СТАРТ ===
+  (async () => {
+    // Загружаем одобренные правки из Supabase
+    if (typeof applyApprovedEdits === 'function') {
+      try {
+        await applyApprovedEdits('УК');
+      } catch (e) {
+        console.warn('Не удалось загрузить правки:', e);
+      }
+    }
+
+    loadChapters();
+    render();
+  })();
 })();
